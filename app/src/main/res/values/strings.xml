@@ -2,6 +2,8 @@
     <string name="app_name">Notes f107660</string>
     <string name="title">Title</string>
     <string name="note">Enter note here</string>
-    <string name="insert_into_database">Insert into database</string>
+    <string name="insert_into_database">Insert note</string>
     <string name="please_write_your_name">Моля, напишете Вашето име!</string>
+    <string name="save_into_database">Save</string>
+    <string name="note_saved">Note saved!</string>
 </resources>

@@ -13,6 +13,7 @@
         android:padding="@dimen/padding"
         android:textSize="@dimen/text_size" />
 
+
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"

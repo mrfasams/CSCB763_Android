@@ -2,12 +2,19 @@ package com.example.f107660;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.f107660.entity.Note;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     String contentNoteSaveStr;
     MyDataBaseHelper dbHelper;
     SQLiteDatabase database;
+    Button randomTextButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.edit_text);
         editTextTitle = findViewById(R.id.edit_title);
         insertButton = findViewById(R.id.insert_button);
+        randomTextButton = findViewById(R.id.random_button);
         viewAllNotestButton = findViewById(R.id.button_list_notes);
 
         insertButton.setOnClickListener(new View.OnClickListener() {
@@ -52,9 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
                     database.execSQL(insertQuery);
 
-//                    ContentValues values = new ContentValues();
-//                    values.put(MyDataBaseHelper.COLUMN_USER_NAME, nameSaveStr);
-//                    database.insert(MyDataBaseHelper.TABLE_NAME, null, values);
+
 
                     Intent intent = new Intent(MainActivity.this, DataActivity.class);
                     startActivity(intent);
@@ -72,6 +79,60 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        randomTextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new GetNotes().execute();
+            }});
+
+    }
+
+
+    private class GetNotes extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(MainActivity.this, "Json Data is downloading", Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            // Making a request to url and getting response
+
+            //String url = "https://random-word-api.herokuapp.com/word";//working
+            String url = "https://random-word-api.vercel.app/api?words=3";
+            String jsonStr = sh.makeServiceCall(url);
+            if (jsonStr != null) {
+                try {
+                    JSONArray listNotes = new JSONArray(jsonStr);
+                    for(int i = 0 ; i < listNotes.length() - 1; i++) {
+                        Note newNote = new Note();
+                        newNote.setContent(listNotes.get(i).toString()) ;
+                        newNote.setTitle(listNotes.get(i).toString());
+
+                        insertNoteToDatabase(newNote);
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+    }
+
+    private void insertNoteToDatabase(Note newNote) {
+        // добавяне на запис
+        String insertQuery = "INSERT INTO " +
+                MyDataBaseHelper.TABLE_NAME + " ("
+                + MyDataBaseHelper.COLUMN_TITLE_NAME + ","  + MyDataBaseHelper.COLUMN_NOTE_CONTENT  +") VALUES ('"
+                + newNote.getTitle() + "','" + newNote.getContent() +"')";
+
+        database.execSQL(insertQuery);
     }
 
     @Override

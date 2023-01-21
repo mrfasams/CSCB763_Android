@@ -1,21 +1,33 @@
 package com.example.f107660;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.widget.AdapterView.OnItemClickListener;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.f107660.entity.Note;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class DataActivity extends AppCompatActivity {
 
     TextView textView;
     ArrayList<String> dataList;
+    HashMap<String,String> dataListMap;
+    List<Note> noteList;
     ListView listView;
     String nameGetStr;
     MyDataBaseHelper dbHelper;
@@ -29,6 +41,8 @@ public class DataActivity extends AppCompatActivity {
         textView = findViewById(R.id.name_text);
         listView = findViewById(R.id.list);
         dataList = new ArrayList<>();
+        dataListMap = new LinkedHashMap<>();
+        noteList = new ArrayList<>();
 
         // инициираме MyDataBaseHelper в onCreate метода на MainActivity.java
         dbHelper = new MyDataBaseHelper(this);
@@ -52,7 +66,7 @@ public class DataActivity extends AppCompatActivity {
             nameGetStr = cursor.getString(cursor.getColumnIndexOrThrow(MyDataBaseHelper.COLUMN_TITLE_NAME));
         }
 
-        textView.setText(nameGetStr);
+        textView.setText("Notes list");
 
         cursor.close();
 
@@ -64,9 +78,25 @@ public class DataActivity extends AppCompatActivity {
         } else {
             while (dataCursor.moveToNext()) {
                 dataList.add(dataCursor.getString(dataCursor.getColumnIndexOrThrow(MyDataBaseHelper.COLUMN_TITLE_NAME)));
+                dataListMap.put(dataCursor.getString(dataCursor.getColumnIndexOrThrow(MyDataBaseHelper.COLUMN_TITLE_NAME)),dataCursor.getString(dataCursor.getColumnIndexOrThrow(MyDataBaseHelper.COLUMN_NOTE_CONTENT)));
+               Note note = new Note();
+                note.setId(dataCursor.getString(dataCursor.getColumnIndexOrThrow(MyDataBaseHelper.UID)));
+                note.setTitle(dataCursor.getString(dataCursor.getColumnIndexOrThrow(MyDataBaseHelper.COLUMN_TITLE_NAME)));
+                note.setContent(dataCursor.getString(dataCursor.getColumnIndexOrThrow(MyDataBaseHelper.COLUMN_NOTE_CONTENT)));
+                noteList.add(note);
+
             }
             ArrayAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dataList);
             listView.setAdapter(listAdapter);
+            listView.setOnItemClickListener(new OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    final String item = (String) parent.getItemAtPosition(position);
+                    Intent intent = new Intent(DataActivity.this, NoteActivity.class);
+                    intent.putExtra("selectedNote", noteList.get(position));
+                    startActivity(intent);
+                }
+            });
         }
         dataCursor.close();
 
