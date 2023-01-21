@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     MyDataBaseHelper dbHelper;
     SQLiteDatabase database;
     Button randomTextButton;
+    Button randomQuoteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         editTextTitle = findViewById(R.id.edit_title);
         insertButton = findViewById(R.id.insert_button);
         randomTextButton = findViewById(R.id.random_button);
+        randomQuoteButton = findViewById(R.id.random_button_quote);
         viewAllNotestButton = findViewById(R.id.button_list_notes);
 
         insertButton.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +88,12 @@ public class MainActivity extends AppCompatActivity {
                 new GetNotes().execute();
             }});
 
+        randomQuoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new GetQuotes().execute();
+            }});
+
     }
 
 
@@ -117,6 +125,45 @@ public class MainActivity extends AppCompatActivity {
                         insertNoteToDatabase(newNote);
                     }
                 }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+    }
+
+
+    private class GetQuotes extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(MainActivity.this, "Json Data is downloading", Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            // Making a request to url and getting response
+
+            //String url = "https://random-word-api.herokuapp.com/word";//working
+            String url = "https://zenquotes.io/api/random";
+            String jsonStr = sh.makeServiceCall(url);
+            if (jsonStr != null) {
+                try {
+                    JSONArray listNotes = new JSONArray(jsonStr);
+                    JSONObject reader = new JSONObject(listNotes.get(0).toString());
+                    String quote = reader.getString("q");
+                    String author = reader.getString("a");
+                    Note newNote = new Note();
+                    newNote.setTitle(author);
+                    newNote.setContent(quote);
+
+                    insertNoteToDatabase(newNote);
+
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

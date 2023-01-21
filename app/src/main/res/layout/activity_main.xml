@@ -44,5 +44,12 @@
         android:layout_gravity="center"
         android:text="Get notes from api" />
 
+    <Button
+        android:id="@+id/random_button_quote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Get random note from api" />
+
 
 </LinearLayout>
