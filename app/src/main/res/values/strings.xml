@@ -6,4 +6,6 @@
     <string name="please_write_your_name">Моля, напишете Вашето име!</string>
     <string name="save_into_database">Save</string>
     <string name="note_saved">Note saved!</string>
+    <string name="delete_into_database">Delete</string>
+    <string name="note_deleted">Note deleted!</string>
 </resources>

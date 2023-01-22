@@ -5,15 +5,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.f107660.entity.Note;
+import com.example.f107660.fragment.NoteTextFragment;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,12 +34,16 @@ public class MainActivity extends AppCompatActivity {
     Button randomTextButton;
     Button randomQuoteButton;
 
+    //fragment
+    EditText editTextFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         // инициираме MyDataBaseHelper в onCreate метода на MainActivity.java
+
         dbHelper = new MyDataBaseHelper(this);
 
         // отваряме БД за четене и запис
@@ -46,6 +55,22 @@ public class MainActivity extends AppCompatActivity {
         randomTextButton = findViewById(R.id.random_button);
         randomQuoteButton = findViewById(R.id.random_button_quote);
         viewAllNotestButton = findViewById(R.id.button_list_notes);
+
+
+        //try fragment
+
+      /*  getSupportFragmentManager().beginTransaction().
+                replace(R.id.fragment_place, new NoteTextFragment(), "SOMETAG").
+                commit();
+
+        NoteTextFragment noteTextFragment = (NoteTextFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragment_place);
+
+        androidx.fragment.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+       */
+        //NoteTextFragment fragmentDemo = NoteTextFragment.newInstance(editTextTitle.getText().toString(), editText.getText().toString());
+       //ft.replace(R.id.fragment_place, fragmentDemo);
+        //ft.commit();
 
         insertButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,6 +213,16 @@ public class MainActivity extends AppCompatActivity {
         database.close();
         dbHelper.close();
         super.onDestroy();
+    }
+
+    private void loadFragment(Fragment fragment) {
+        // create a FragmentManager
+        FragmentManager fm = getFragmentManager();
+        // create a FragmentTransaction to begin the transaction and replace the Fragment
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        // replace the FrameLayout with new Fragment
+        fragmentTransaction.replace(R.id.fragment_place, fragment);
+        fragmentTransaction.commit(); // save the changes
     }
 
 }

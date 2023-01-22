@@ -6,7 +6,8 @@
     android:orientation="vertical"
     tools:context=".NoteActivity">
 
-    <EditText
+
+   <!-- <EditText
         android:id="@+id/edit_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,4 +30,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/save_into_database" />
+-->
+
+    <FrameLayout
+        android:id="@+id/fragment_place"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
 </LinearLayout>

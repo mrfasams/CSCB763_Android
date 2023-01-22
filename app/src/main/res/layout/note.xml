@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
-
+    android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
     <EditText
-        android:id="@+id/edit_title"
+        android:id="@+id/edit_title_fragment"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="@string/title"
@@ -15,7 +18,7 @@
         android:inputType="textCapWords" />
 
     <EditText
-        android:id="@+id/edit_text"
+        android:id="@+id/edit_content_fragment"
         android:layout_width="match_parent"
         android:layout_height="230dp"
         android:hint="@string/note"
@@ -29,30 +32,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/insert_into_database" />
-
+        android:text="@string/save_into_database" />
     <Button
-        android:id="@+id/button_list_notes"
+        android:id="@+id/delete_button"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="View all notes" />
-
-    <Button
-        android:id="@+id/random_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Get notes from api" />
-
-    <Button
-        android:id="@+id/random_button_quote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Get random note from api" />
-
-
-
-
-</LinearLayout>
+        android:text="@string/delete_into_database" />
+    </LinearLayout>
+</FrameLayout>
