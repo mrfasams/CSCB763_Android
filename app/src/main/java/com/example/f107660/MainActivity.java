@@ -5,11 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
+import android.util.Log;
 
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +18,8 @@ import com.example.f107660.fragment.NoteTextFragment;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,8 +34,12 @@ public class MainActivity extends AppCompatActivity {
     Button randomTextButton;
     Button randomQuoteButton;
 
-    //fragment
-    EditText editTextFragment;
+    //TTS
+    private TextToSpeech textToSpeech;
+    private Button btn;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +122,44 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new GetQuotes().execute();
             }});
+
+
+        btn = (Button) findViewById(R.id.btn);
+
+        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int ttsLang = textToSpeech.setLanguage(Locale.US);
+
+                    if (ttsLang == TextToSpeech.LANG_MISSING_DATA
+                            || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Log.e("TTS", "The Language is not supported!");
+                    } else {
+                        Log.i("TTS", "Language Supported.");
+                    }
+                    Log.i("TTS", "Initialization success.");
+                } else {
+                    Toast.makeText(getApplicationContext(), "TTS Initialization failed!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+                String data = editText.getText().toString();
+                Log.i("TTS", "button clicked: " + data);
+                int speechStatus = textToSpeech.speak(data, TextToSpeech.QUEUE_FLUSH, null);
+
+                if (speechStatus == TextToSpeech.ERROR) {
+                    Log.e("TTS", "Error in converting Text to Speech!");
+                }
+            }
+
+        });
 
     }
 
@@ -212,17 +254,13 @@ public class MainActivity extends AppCompatActivity {
         // затваряме връзката с БД
         database.close();
         dbHelper.close();
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
         super.onDestroy();
     }
 
-    private void loadFragment(Fragment fragment) {
-        // create a FragmentManager
-        FragmentManager fm = getFragmentManager();
-        // create a FragmentTransaction to begin the transaction and replace the Fragment
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        // replace the FrameLayout with new Fragment
-        fragmentTransaction.replace(R.id.fragment_place, fragment);
-        fragmentTransaction.commit(); // save the changes
-    }
+
 
 }
