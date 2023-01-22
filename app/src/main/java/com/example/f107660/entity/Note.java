@@ -42,10 +42,9 @@ public class Note implements Serializable {
 
     @Override
     public String toString() {
-        return "Note{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                '}';
+        return "Note " +
+                "id is " + id  +
+                " title is " + title +
+                " content is  " + content  + " Next ";
     }
 }

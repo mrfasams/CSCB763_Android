@@ -9,9 +9,6 @@
     <string name="delete_into_database">Delete</string>
     <string name="note_deleted">Note deleted!</string>
 
-    <string name="speech_toggle_on">START SPEAKING</string>
-    <string name="speech_toggle_off">STOP SPEAKING</string>
-
-    <string name="start_speaking">Okay! I will read your messages out loud for you now.</string>
-    <string name="stop_speaking">Okay! I will stay silent now.</string>
+    <string name="startButtonText">Start the Service TTS</string>
+    <string name="stopButtonText">Stop the Service TTS</string>
 </resources>

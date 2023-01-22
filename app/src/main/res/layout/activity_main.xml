@@ -38,12 +38,6 @@
         android:layout_gravity="center"
         android:text="View all notes" />
 
-    <Button
-        android:id="@+id/random_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Get notes from api" />
 
     <Button
         android:id="@+id/random_button_quote"
@@ -52,14 +46,22 @@
         android:layout_gravity="center"
         android:text="Get random note from api" />
 
+
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
-        android:elevation="0dp"
-        android:paddingHorizontal="30dp"
-        android:text="Click to convert text to speech" />
+        android:layout_gravity="center"
+        android:text="@string/startButtonText"
+        />
+
+    <Button
+        android:id="@+id/stopButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/stopButtonText"
+      />
 
 
 
